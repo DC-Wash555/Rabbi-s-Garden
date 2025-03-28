@@ -1,0 +1,9 @@
+/website
+  ├── index.html       (Home Page)
+  ├── about.html       (About Page)
+  ├── donations.html   (Donations Page)
+  ├── sermons.html     (Sermons Page)
+  ├── shop.html        (Shop Page)
+  ├── contact.html     (Contact Page)
+  ├── styles.css       (Shared CSS file)
+  └── navbar.js        (Shared JavaScript for navigation bar)

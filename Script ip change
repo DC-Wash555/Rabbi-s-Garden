@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Replace 'eth0' with your network interface name
+INTERFACE="eth0"
+
+# Loop to change the IP every 5 seconds
+while true
+do
+  # Disable the network interface
+  sudo ifconfig $INTERFACE down
+
+  # Change the MAC address (optional but can be used to change IP allocation behavior)
+  sudo ifconfig $INTERFACE hw ether $(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//')
+
+  # Enable the network interface
+  sudo ifconfig $INTERFACE up
+
+  # Request a new IP address via DHCP
+  sudo dhclient -v $INTERFACE
+
+  # Wait for 5 seconds
+  sleep 5
+done
+

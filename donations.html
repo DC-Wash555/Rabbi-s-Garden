@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rabbi's Garden - Support Our Green Mission</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Poppins:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+  <style>
+    :root {
+      --primary-green: #1e8449;
+      --dark-green: #145a32;
+      --light-green: #58d68d;
+      --gold-accent: #f1c40f;
+      --pure-white: #ffffff;
+      --off-white: #f8f9fa;
+      --dark-bg: #1a1a1a;
+      --text-dark: #333333;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-dark);
+      line-height: 1.6;
+      background-color: var(--off-white);
+    }
+
+    h1, h2, h3 {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--dark-green);
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      color: var(--pure-white);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    nav {
+      background-color: var(--pure-white);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+
+    .logo {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.8rem;
+      color: var(--primary-green);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo i {
+      margin-right: 10px;
+      color: var(--gold-accent);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+
+    .nav-links li {
+      margin-left: 1.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 600;
+      transition: color 0.3s;
+      position: relative;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-green);
+    }
+
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: var(--primary-green);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover:after {
+      width: 100%;
+    }
+
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                  url('https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+      height: 60vh;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: white;
+      margin-bottom: 3rem;
+    }
+
+    .hero-content {
+      width: 100%;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 1rem auto;
+    }
+
+    .reasons {
+      padding: 4rem 0;
+      background-color: var(--pure-white);
+    }
+
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .reason-card {
+      background-color: var(--off-white);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .reason-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .reason-img {
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .reason-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .reason-card:hover .reason-img img {
+      transform: scale(1.1);
+    }
+
+    .reason-content {
+      padding: 1.5rem;
+    }
+
+    .reason-content h3 {
+      color: var(--primary-green);
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+    }
+
+    .donations {
+      padding: 5rem 0;
+      background: linear-gradient(to bottom, var(--off-white), var(--pure-white));
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .section-title:after {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 4px;
+      background-color: var(--gold-accent);
+      margin: 1rem auto 0;
+    }
+
+    .donations .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .donations .card {
+      background-color: var(--pure-white);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-top: 5px solid var(--primary-green);
+    }
+
+    .donations .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .donations .card h3 {
+      color: var(--primary-green);
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .donations .card .benefits li {
+      margin-bottom: 0.8rem;
+      position: relative;
+      padding-left: 1.8rem;
+    }
+
+    .donations .card .benefits li:before {
+      content: '\f00c';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      left: 0;
+      color: var(--light-green);
+    }
+
+    .donations .card .amount {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--primary-green);
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: var(--primary-green);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .btn:hover {
+      background-color: var(--dark-green);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .donation-section {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .custom-donation {
+      background-color: var(--pure-white);
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      flex: 2;
+    }
+
+    .payment-info {
+      background-color: var(--pure-white);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      flex: 1;
+    }
+
+    .payment-info h3 {
+      color: var(--primary-green);
+      margin-bottom: 20px;
+      text-align: center;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .payment-info h3:after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 50px;
+      height: 2px;
+      background-color: var(--gold-accent);
+    }
+
+    .payment-method-info {
+      margin-bottom: 25px;
+    }
+
+    .payment-method-info h4 {
+      display: flex;
+      align-items: center;
+      color: var(--primary-green);
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .payment-method-info h4 i {
+      margin-right: 10px;
+      font-size: 1.3rem;
+    }
+
+    .payment-method-info p {
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .payment-method-info .copy-btn {
+      background-color: var(--primary-green);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.8em;
+      margin-left: 5px;
+      transition: all 0.3s;
+    }
+
+    .payment-method-info .copy-btn:hover {
+      background-color: var(--dark-green);
+    }
+
+    .custom-donation h3 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .donation-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .donation-amounts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .donation-amounts .amount-option {
+      padding: 10px 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .donation-amounts .amount-option:hover,
+    .donation-amounts .amount-option.selected {
+      background-color: var(--primary-green);
+      color: white;
+      border-color: var(--primary-green);
+    }
+
+    .custom-amount {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .custom-amount span {
+      margin-right: 10px;
+      font-weight: 500;
+    }
+
+    .custom-amount input {
+      flex-grow: 1;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    .donor-info {
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    .donation-message {
+      margin-bottom: 20px;
+    }
+
+    .donation-message textarea {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .payment-options {
+      display: flex;
+      gap: 15px;
+    }
+
+    .payment-options i {
+      font-size: 2em;
+    }
+
+    .fa-cc-visa { color: #1a1f71; }
+    .fa-cc-mastercard { color: #eb001b; }
+    .fa-cc-amex { color: #002663; }
+    .fa-cc-paypal { color: #003087; }
+
+    .payment-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .payment-content {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .payment-content h3 {
+      color: var(--primary-green);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .payment-methods {
+      margin: 20px 0;
+    }
+
+    .payment-method {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .payment-method:hover {
+      border-color: var(--primary-green);
+    }
+
+    .payment-method.selected {
+      border-color: var(--primary-green);
+      background-color: rgba(30, 132, 73, 0.1);
+    }
+
+    .payment-method i {
+      font-size: 2em;
+      margin-right: 15px;
+    }
+
+    .payment-method .method-info {
+      flex-grow: 1;
+    }
+
+    .payment-method .method-info h4 {
+      margin-bottom: 5px;
+    }
+
+    .payment-method .method-info p {
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .bank-details {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      display: none;
+    }
+
+    .bank-details h4 {
+      margin-bottom: 10px;
+    }
+
+    .bank-details p {
+      margin-bottom: 8px;
+    }
+
+    .bank-details .copy-btn {
+      background-color: var(--primary-green);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.8em;
+      margin-left: 5px;
+    }
+
+    .StripeElement {
+      box-sizing: border-box;
+      height: 40px;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: white;
+    }
+
+    .StripeElement--focus {
+      border-color: var(--primary-green);
+      box-shadow: 0 0 0 1px var(--primary-green);
+    }
+
+    .StripeElement--invalid {
+      border-color: #dc3545;
+    }
+
+    .StripeElement--webkit-autofill {
+      background-color: #fefde5 !important;
+    }
+
+    #card-errors {
+      color: #dc3545;
+      margin: 10px 0;
+      font-size: 0.9em;
+    }
+
+    #paypal-button-container {
+      display: none;
+      margin: 20px 0;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    footer {
+      background-color: var(--dark-bg);
+      color: white;
+      padding: 4rem 0 2rem;
+    }
+
+    .footer-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-logo {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.8rem;
+      color: var(--pure-white);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .footer-logo i {
+      margin-right: 10px;
+      color: var(--gold-accent);
+    }
+
+    .footer-about p {
+      margin-bottom: 1rem;
+      color: #aaa;
+    }
+
+    .footer-links h3, .footer-social h3 {
+      color: var(--pure-white);
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-links h3:after, .footer-social h3:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 50px;
+      height: 2px;
+      background-color: var(--gold-accent);
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-links a {
+      color: #aaa;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--light-green);
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: #333;
+      border-radius: 50%;
+      color: white;
+      transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+      background-color: var(--light-green);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid #333;
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    .validation-error {
+      color: #dc3545;
+      margin: 10px 0;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .success-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .success-content {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .success-content h3 {
+      color: var(--primary-green);
+      margin-bottom: 20px;
+    }
+
+    .success-content p {
+      white-space: pre-line;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .success-content .success-icon {
+      color: var(--primary-green);
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .error-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .error-content {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .error-content h3 {
+      color: #dc3545;
+      margin-bottom: 20px;
+    }
+
+    .error-content p {
+      white-space: pre-line;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .error-content .error-icon {
+      color: #dc3545;
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-container {
+        flex-direction: column;
+        padding: 1rem;
+      }
+
+      .nav-links {
+        margin-top: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .nav-links li {
+        margin: 0.5rem;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .donations .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .donation-section {
+        flex-direction: column;
+      }
+
+      .form-footer {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .payment-options {
+        order: -1;
+        justify-content: center;
+      }
+      
+      .modal-buttons {
+        flex-direction: column;
+      }
+      
+      .modal-buttons .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container container">
+      <a href="index.html" class="logo">
+        <i class="fas fa-leaf"></i>Rabbi's Garden
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="donations.html">Donations</a></li>
+        <li><a href="sermons.html">Sermons</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="contacts.html">Contacts</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content container">
+      <h1 class="hero-title">Support Our Mission</h1>
+      <p>At Rabbi's Garden, we are dedicated to spreading the life-changing message of the Bible to individuals around the world. Our mission is to make the teachings of Christ accessible to all—whether through translations, community outreach, or educational programs.</p>
+      <a href="#donate" class="btn">Donate Now</a>
+    </div>
+  </section>
+
+  <!-- Why Donate Section -->
+  <section class="reasons container" id="why-donate">
+    <h2 class="section-title">Why Your Donation Matters</h2>
+    <div class="reasons-grid">
+      <div class="reason-card">
+        <div class="reason-img">
+          <img src="file:///home/kali/Downloads/IMG-20250317-WA0025.jpg" alt="Community Garden">
+        </div>
+        <div class="reason-content">
+          <h3>Reaching the Unreached</h3>
+          <p>There are still millions of people around Uganda who have never heard the message of Jesus Christ. Your donation helps us take the Bible to the farthest corners of the earth, reaching individuals and communities who are spiritually hungry and eager to learn about Christ’s love.</p>
+        </div>
+      </div>
+      
+      <div class="reason-card">
+        <div class="reason-img">
+          <img src="file:///home/kali/Downloads/IMG-20250317-WA0021.jpg" alt="Children in Garden">
+        </div>
+        <div class="reason-content">
+          <h3>Educational Outreach</h3>
+          <p>Education is key to spiritual development. We provide resources such as Bible courses, study guides, and training for pastors and leaders, equipping them with the knowledge and tools to effectively share God’s Word with others. With your help, we can continue to provide these resources to those who are leading others in faith.</p>
+        </div>
+      </div>
+      
+      <div class="reason-card">
+        <div class="reason-img">
+          <img src="file:///home/kali/Downloads/IMG-20250317-WA0016.jpg" alt="Planting Trees">
+        </div>
+        <div class="reason-content">
+          <h3>Building Discipleship Communities</h3>
+          <p>Beyond just distributing Bibles, we’re committed to creating communities where believers can grow together in faith. Your gift helps fund local Bible study groups, discipleship programs, and church planting efforts that foster lasting spiritual growth. You’re not just giving a Bible—you're empowering individuals to engage with it, learn from it, and live it out.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Donations Section -->
+  <section class="donations container" id="donate">
+    <h2 class="section-title">Make a Difference Today</h2>
+    <p class="intro" style="text-align: center; max-width: 800px; margin: 0 auto 60px;">
+      Choose from one of our donation options below or specify your own amount. Every contribution helps us grow.
+    </p>
+    
+    <div class="grid">
+      <div class="card">
+        <h3>Bringing the Bible to communities</h3>
+        <ul class="benefits">
+          <li>Allows us to provide Bibles to 10 families in a rural village, introducing them to the Word of God for the first time.</li>
+          <li>Provides a month's worth of Bible study materials for a church leader, helping them teach others effectively.</li>
+          <li>Sponsors a Bible study group for 25 new believers, allowing them to meet regularly for fellowship, teaching, and prayer.</li>
+        </ul>
+        <div class="amount">$25</div>
+        <button class="btn donate-btn" data-amount="25">Donate Now</button>
+      </div>
+      
+      <div class="card">
+        <h3>Empowering Disciples and Leaders</h3>
+        <ul class="benefits">
+          <li>Supports a pastor’s leadership training program, giving them the skills and resources to disciple hundreds of new believers.</li>
+          <li>Funds a community outreach event that can lead to dozens of new believers making a commitment to Christ, impacting families and neighborhoods for generations.</li>
+          <li>Provides 10 people with the opportunity to hear the Gospel, opening doors for personal salvation and eternal life.</li>
+        </ul>
+        <div class="amount">$75</div>
+        <button class="btn donate-btn" data-amount="75">Donate Now</button>
+      </div>
+      
+      <div class="card">
+        <h3>Equipping Believers to Live Out Their Faith</h3>
+        <ul class="benefits">
+          <li>Provides a discipleship course for 20 people, equipping them with the practical tools they need to live out their faith and mentor others.</li>
+          <li>Supports a Bible-based educational workshop for women, empowering them to teach their families the principles of the Christian faith.</li>
+          <li>Provides materials for a youth outreach program that engages children and teenagers in faith-building activities and Bible lessons.</li>
+          <li>Helps establish a new church in a rural area, providing worship space, resources, and support for the first few months.</li>
+        </ul>
+        <div class="amount">$150</div>
+        <button class="btn donate-btn" data-amount="150">Donate Now</button>
+      </div>
+    </div>
+    
+    <div class="donation-section">
+      <div class="custom-donation">
+        <h3>Custom Donation Amount</h3>
+        <form id="customDonationForm" class="donation-form">
+          <div class="donation-amounts">
+            <div class="amount-option" data-amount="10">$10</div>
+            <div class="amount-option" data-amount="25">$25</div>
+            <div class="amount-option selected" data-amount="50">$50</div>
+            <div class="amount-option" data-amount="100">$100</div>
+            <div class="amount-option" data-amount="250">$250</div>
+          </div>
+          
+          <div class="custom-amount">
+            <span>$</span>
+            <input type="number" id="customAmount" placeholder="Other amount" min="1" value="50">
+          </div>
+          
+          <div class="donor-info">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" required maxlength="100">
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" required maxlength="255">
+            </div>
+          </div>
+          
+          <div class="donation-message">
+            <label for="message">Personal Message (Optional)</label>
+            <textarea id="message" placeholder="Add a personal message..." maxlength="500"></textarea>
+          </div>
+          
+          <div class="form-footer">
+            <div class="payment-options">
+              <i class="fab fa-cc-visa"></i>
+              <i class="fab fa-cc-mastercard"></i>
+              <i class="fab fa-cc-amex"></i>
+              <i class="fab fa-cc-paypal"></i>
+            </div>
+            <button type="submit" class="btn">Continue to Payment</button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="payment-info">
+        <h3>Payment Information</h3>
+        
+        <div class="payment-method-info">
+          <h4><i class="fab fa-cc-stripe" style="color: #6772e5;"></i> Credit/Debit Card</h4>
+          <p>Secure payments processed through Stripe</p>
+          <p>We accept Visa, Mastercard, American Express, and other major cards</p>
+        </div>
+        
+        <div class="payment-method-info">
+          <h4><i class="fab fa-paypal" style="color: #003087;"></i> PayPal</h4>
+          <p>Pay with your PayPal account or credit card</p>
+          <p>Send to: <strong>donations@rabbisgarden.org</strong></p>
+        </div>
+        
+        <div class="payment-method-info">
+          <h4><i class="fas fa-university" style="color: #1e8449;"></i> Bank Transfer</h4>
+          <p>Account Name: <strong>Rabbi's Garden Foundation</strong></p>
+          <p>Bank: <strong>Green Earth Bank</strong></p>
+          <p>Account #: <strong id="accountNumber">123456789</strong> <button class="copy-btn" data-target="accountNumber">Copy</button></p>
+          <p>Routing #: <strong id="routingNumber">987654321</strong> <button class="copy-btn" data-target="routingNumber">Copy</button></p>
+          <p>SWIFT/BIC: <strong id="swiftCode">GREAUS33</strong> <button class="copy-btn" data-target="swiftCode">Copy</button></p>
+        </div>
+        
+        <div class="payment-method-info">
+          <h4><i class="fas fa-money-bill-wave" style="color: #28a745;"></i> Check</h4>
+          <p>Make payable to: <strong>Rabbi's Garden Foundation</strong></p>
+          <p>Mail to: 123 Garden Way, Greenville, CA 12345</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-container">
+        <div class="footer-about">
+          <div class="footer-logo">
+            <i class="fas fa-leaf"></i>Rabbi's Garden
+          </div>
+          <p>A community-based initiative dedicated to sharing the transformative power of the Bible with the world.</p>
+          <p>Join Us in Spreading the Word: Become a Part of Our Bible Community!</p>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="donations.html">Donations</a></li>
+            <li><a href="sermons.html">Sermons</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-social">
+          <h3>Connect With Us</h3>
+          <div class="social-icons">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="TIKTOK"><i class="fab fa-tiktok"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+          <p style="margin-top: 1rem; color: #aaa;">Follow our journey and see the impact of your support.</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; <span id="currentYear"></span> Rabbi's Garden. All rights reserved. | <a href="privacy.html" style="color: var(--light-green);">Privacy Policy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="payment-modal">
+    <div class="payment-content">
+      <h3>Complete Your Donation</h3>
+      <p id="donationSummary">You're donating $50 to Rabbi's Garden</p>
+      
+      <div class="payment-methods">
+        <h4>Select Payment Method</h4>
+        
+        <div class="payment-method selected" data-method="card">
+          <i class="far fa-credit-card" style="color: #1a1f71;"></i>
+          <div class="method-info">
+            <h4>Credit/Debit Card</h4>
+            <p>Pay securely with your Visa, Mastercard, or American Express</p>
+          </div>
+        </div>
+        
+        <div class="payment-method" data-method="paypal">
+          <i class="fab fa-cc-paypal" style="color: #003087;"></i>
+          <div class="method-info">
+            <h4>PayPal</h4>
+            <p>Pay with your PayPal account or credit card</p>
+          </div>
+        </div>
+        
+        <div class="payment-method" data-method="bank">
+          <i class="fas fa-university" style="color: #1e8449;"></i>
+          <div class="method-info">
+            <h4>Bank Transfer</h4>
+            <p>Direct transfer to our bank account</p>
+          </div>
+        </div>
+      </div>
+      
+      <div id="bankDetails" class="bank-details">
+        <h4>Bank Transfer Details</h4>
+        <p><strong>Account Name:</strong> Rabbi's Garden Foundation</p>
+        <p><strong>Bank:</strong> Green Earth Bank</p>
+        <p><strong>Account Number:</strong> <span id="accountNumberModal">123456789</span> <button class="copy-btn" data-target="accountNumberModal">Copy</button></p>
+        <p><strong>Routing Number:</strong> <span id="routingNumberModal">987654321</span> <button class="copy-btn" data-target="routingNumberModal">Copy</button></p>
+        <p><strong>SWIFT/BIC:</strong> <span id="swiftCodeModal">GREAUS33</span> <button class="copy-btn" data-target="swiftCodeModal">Copy</button></p>
+        <p>Please include your name as reference when making the transfer.</p>
+      </div>
+      
+      <div id="cardElementContainer" style="display: none;">
+        <div class="form-group">
+          <label for="cardholder-name">Cardholder Name</label>
+          <input type="text" id="cardholder-name" placeholder="Name on card" required maxlength="100">
+        </div>
+        <div id="cardElement" class="form-group">
+          <!-- Stripe.js will inject the Card Element here -->
+        </div>
+        <div id="card-errors" role="alert"></div>
+      </div>
+      
+      <div id="paypal-button-container" style="display: none; margin: 20px 0;"></div>
+      
+      <div class="modal-buttons">
+        <button id="confirmPayment" class="btn" style="display: none;">Complete Donation</button>
+        <button id="cancelPayment" class="btn btn-outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal Template -->
+  <div id="successModalTemplate" style="display: none;">
+    <div class="success-content">
+      <div class="success-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>Donation Successful!</h3>
+      <p id="successMessage"></p>
+      <button id="closeSuccessModal" class="btn">Close</button>
+    </div>
+  </div>
+
+  <!-- Error Modal Template -->
+  <div id="errorModalTemplate" style="display: none;">
+    <div class="error-content">
+      <div class="error-icon">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <h3>Payment Failed</h3>
+      <p id="errorMessage"></p>
+      <button id="closeErrorModal" class="btn">Try Again</button>
+    </div>
+  </div>
+
+  <script>
+    // Security Token for API requests
+    let securityToken = 'secure-token-' + Math.random().toString(36).substring(2, 15) + 
+                       Math.random().toString(36).substring(2, 15);
+
+    // Initialize Stripe with your publishable key
+    const stripe = Stripe('pk_test_YOUR_STRIPE_PUBLISHABLE_KEY');
+    let elements;
+    let cardElement;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set current year in footer
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+      // Current donation information
+      let currentDonationAmount = 50;
+      let currentDonationType = 'custom';
+      let currentPaymentMethod = 'card';
+      
+      // DOM Elements
+      const paymentModal = document.getElementById('paymentModal');
+      const donationSummary = document.getElementById('donationSummary');
+      const customDonationForm = document.getElementById('customDonationForm');
+      const customAmountInput = document.getElementById('customAmount');
+      const paymentMethods = document.querySelectorAll('.payment-method');
+      const bankDetails = document.getElementById('bankDetails');
+      const cardElementContainer = document.getElementById('cardElementContainer');
+      const paypalButtonContainer = document.getElementById('paypal-button-container');
+      const confirmPaymentBtn = document.getElementById('confirmPayment');
+      const cancelPaymentBtn = document.getElementById('cancelPayment');
+      const copyButtons = document.querySelectorAll('.copy-btn');
+      
+      // Input sanitization function
+      function sanitizeInput(input) {
+        if (typeof input !== 'string') return input;
+        return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+
+      // Secure Fetch Wrapper
+      async function secureFetch(url, options = {}) {
+        const headers = {
+          'Content-Type': 'application/json',
+          'X-Security-Token': securityToken,
+          'X-Requested-With': 'XMLHttpRequest'
+        };
+        
+        options.headers = {...headers, ...options.headers};
+        
+        try {
+          const response = await fetch(url, options);
+          
+          // Verify response is JSON before parsing
+          const contentType = response.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Invalid response format');
+          }
+          
+          const data = await response.json();
+          
+          if (!data || typeof data !== 'object') {
+            throw new Error('Invalid response data');
+          }
+          
+          return data;
+        } catch (error) {
+          console.error('Secure fetch error:', error);
+          throw error;
+        }
+      }
+
+      // Secure Event Listeners
+      function addSecureEventListener(element, event, handler) {
+        element.addEventListener(event, function(e) {
+          if (!e.target || !e.target.isEqualNode(element)) return;
+          handler.call(this, e);
+        });
+      }
+
+      // Donation card buttons
+      document.querySelectorAll('.donate-btn').forEach(button => {
+        addSecureEventListener(button, 'click', (e) => {
+          const amount = parseFloat(e.target.getAttribute('data-amount'));
+          if (isNaN(amount)) return;
+          
+          currentDonationAmount = amount;
+          currentDonationType = 'preset';
+          showPaymentModal();
+        });
+      });
+      
+      // Custom donation amount selection
+      const amountOptions = document.querySelectorAll('.amount-option');
+      amountOptions.forEach(option => {
+        addSecureEventListener(option, 'click', () => {
+          amountOptions.forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          const amount = parseFloat(option.getAttribute('data-amount'));
+          if (isNaN(amount)) return;
+          
+          customAmountInput.value = amount;
+          currentDonationAmount = amount;
+        });
+      });
+      
+      // Custom amount input with validation
+      customAmountInput.addEventListener('input', () => {
+        amountOptions.forEach(opt => opt.classList.remove('selected'));
+        const amount = parseFloat(customAmountInput.value);
+        currentDonationAmount = isNaN(amount) ? 0 : amount;
+      });
+      
+      // Form submission with enhanced validation
+      customDonationForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        currentDonationType = 'custom';
+        currentDonationAmount = parseFloat(customAmountInput.value) || 0;
+        
+        // Clear any existing errors
+        const existingError = document.querySelector('.validation-error');
+        if (existingError) {
+          existingError.remove();
+        }
+        
+        // Enhanced amount validation
+        if (currentDonationAmount <= 0 || currentDonationAmount > 100000) {
+          showValidationError('Please enter a valid donation amount between $1 and $100,000');
+          return;
+        }
+        
+        // Validate donor info with sanitization
+        const name = sanitizeInput(document.getElementById('name').value.trim());
+        const email = sanitizeInput(document.getElementById('email').value.trim());
+        
+        if (!name || name.length < 2 || name.length > 100) {
+          showValidationError('Please enter a valid name (2-100 characters)');
+          return;
+        }
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email) || email.length > 255) {
+          showValidationError('Please enter a valid email address');
+          return;
+        }
+        
+        showPaymentModal();
+      });
+      
+      // Show validation error with safe HTML
+      function showValidationError(message) {
+        const errorElement = document.createElement('div');
+        errorElement.className = 'validation-error';
+        errorElement.textContent = message;
+        
+        const existingError = document.querySelector('.validation-error');
+        if (existingError) {
+          existingError.replaceWith(errorElement);
+        } else {
+          customDonationForm.insertBefore(errorElement, customDonationForm.firstChild);
+        }
+        
+        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      
+      // Initialize Stripe Elements with additional security
+      function initializeStripeElements() {
+        if (!elements) {
+          elements = stripe.elements();
+          cardElement = elements.create('card', {
+            style: {
+              base: {
+                fontSize: '16px',
+                color: '#32325d',
+                '::placeholder': {
+                  color: '#aab7c4'
+                },
+                ':disabled': {
+                  color: '#aab7c4'
+                }
+              },
+              invalid: {
+                color: '#dc3545',
+                iconColor: '#dc3545'
+              }
+            },
+            hidePostalCode: true,
+            disabled: false
+          });
+          
+          cardElement.mount('#cardElement');
+          
+          cardElement.on('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+              displayError.textContent = event.error.message;
+            } else {
+              displayError.textContent = '';
+            }
+          });
+        }
+      }
+      
+      // Show payment modal with security checks
+      function showPaymentModal() {
+        if (currentDonationAmount <= 0 || currentDonationAmount > 100000) {
+          showValidationError('Invalid donation amount');
+          return;
+        }
+        
+        donationSummary.textContent = `You're donating $${currentDonationAmount.toFixed(2)} to Rabbi's Garden`;
+        paymentModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        updatePaymentMethodUI();
+      }
+      
+      // Update payment method UI with security checks
+      function updatePaymentMethodUI() {
+        bankDetails.style.display = 'none';
+        cardElementContainer.style.display = 'none';
+        paypalButtonContainer.style.display = 'none';
+        confirmPaymentBtn.style.display = 'none';
+        
+        paypalButtonContainer.innerHTML = '';
+        
+        switch(currentPaymentMethod) {
+          case 'bank':
+            bankDetails.style.display = 'block';
+            confirmPaymentBtn.style.display = 'block';
+            confirmPaymentBtn.textContent = 'I Have Completed Transfer';
+            break;
+            
+          case 'card':
+            cardElementContainer.style.display = 'block';
+            confirmPaymentBtn.style.display = 'block';
+            confirmPaymentBtn.textContent = `Pay $${currentDonationAmount.toFixed(2)}`;
+            initializeStripeElements();
+            break;
+            
+          case 'paypal':
+            renderPayPalButton();
+            break;
+        }
+      }
+      
+      // Render PayPal button with security
+      function renderPayPalButton() {
+        paypalButtonContainer.style.display = 'block';
+        
+        paypal.Buttons({
+          createOrder: function(data, actions) {
+            if (currentDonationAmount <= 0 || currentDonationAmount > 100000) {
+              throw new Error('Invalid donation amount');
+            }
+            
+            return actions.order.create({
+              purchase_units: [{
+                amount: {
+                  value: currentDonationAmount.toFixed(2),
+                  currency_code: 'USD',
+                  breakdown: {
+                    item_total: {
+                      value: currentDonationAmount.toFixed(2),
+                      currency_code: 'USD'
+                    }
+                  }
+                },
+                items: [{
+                  name: 'Donation to Rabbi\'s Garden',
+                  description: 'Community garden support',
+                  quantity: '1',
+                  unit_amount: {
+                    value: currentDonationAmount.toFixed(2),
+                    currency_code: 'USD'
+                  }
+                }],
+                description: 'Donation to Rabbi\'s Garden',
+                payee: {
+                  email_address: 'donations@rabbisgarden.org'
+                }
+              }],
+              application_context: {
+                shipping_preference: 'NO_SHIPPING',
+                user_action: 'PAY_NOW'
+              }
+            });
+          },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+              const payerName = details.payer.name.given_name + ' ' + details.payer.name.surname;
+              const payerEmail = details.payer.email_address;
+              
+              secureFetch('/record-paypal-donation', {
+                method: 'POST',
+                body: JSON.stringify({
+                  amount: currentDonationAmount,
+                  transactionId: details.id,
+                  payerName: sanitizeInput(payerName),
+                  payerEmail: sanitizeInput(payerEmail),
+                  donationType: currentDonationType,
+                  verificationToken: securityToken
+                })
+              }).then(response => {
+                if (!response.success) {
+                  throw new Error('Payment recording failed');
+                }
+                showPaymentSuccess({
+                  method: 'PayPal',
+                  transactionId: details.id,
+                  payerEmail: payerEmail,
+                  payerName: payerName
+                });
+              }).catch(error => {
+                console.error('Payment recording error:', error);
+                showPaymentError('There was an error recording your payment. Please contact support.');
+              });
+            });
+          },
+          onError: function(err) {
+            console.error('PayPal error:', err);
+            showPaymentError('There was an error processing your PayPal payment. Please try again or choose another payment method.');
+          },
+          onCancel: function(data) {
+            console.log('Payment cancelled', data);
+          },
+          onShippingChange: function(data, actions) {
+            if (data.shipping_address) {
+              return actions.reject();
+            }
+            return actions.resolve();
+          }
+        }).render('#paypal-button-container');
+      }
+      
+      // Payment method selection with security
+      paymentMethods.forEach(method => {
+        addSecureEventListener(method, 'click', () => {
+          paymentMethods.forEach(m => m.classList.remove('selected'));
+          method.classList.add('selected');
+          const methodValue = method.getAttribute('data-method');
+          
+          if (['card', 'paypal', 'bank'].includes(methodValue)) {
+            currentPaymentMethod = methodValue;
+            updatePaymentMethodUI();
+          }
+        });
+      });
+      
+      // Secure copy bank details
+      copyButtons.forEach(button => {
+        addSecureEventListener(button, 'click', () => {
+          const targetId = button.getAttribute('data-target');
+          const targetElement = document.getElementById(targetId);
+          
+          if (!targetElement) return;
+          
+          const textToCopy = targetElement.textContent;
+          
+          navigator.clipboard.writeText(textToCopy).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = '#2d6a4f';
+            
+            setTimeout(() => {
+              button.textContent = originalText;
+              button.style.backgroundColor = '#4caf50';
+            }, 2000);
+          }).catch(err => {
+            console.error('Failed to copy text: ', err);
+          });
+        });
+      });
+      
+      // Handle payment confirmation with security
+      confirmPaymentBtn.addEventListener('click', async () => {
+        if (currentPaymentMethod === 'bank') {
+          showPaymentSuccess({
+            method: 'Bank Transfer',
+            instructions: 'Please send your transfer using the provided bank details. We will notify you once we receive your payment.'
+          });
+        } 
+        else if (currentPaymentMethod === 'card') {
+          const cardholderName = sanitizeInput(document.getElementById('cardholder-name').value.trim());
+          
+          if (!cardholderName || cardholderName.length < 2 || cardholderName.length > 100) {
+            alert('Please enter a valid cardholder name (2-100 characters)');
+            return;
+          }
+          
+          confirmPaymentBtn.disabled = true;
+          confirmPaymentBtn.textContent = 'Processing...';
+          
+          try {
+            if (currentDonationAmount <= 0 || currentDonationAmount > 100000) {
+              throw new Error('Invalid donation amount');
+            }
+            
+            const { paymentMethod, error } = await stripe.createPaymentMethod({
+              type: 'card',
+              card: cardElement,
+              billing_details: {
+                name: cardholderName,
+                email: sanitizeInput(document.getElementById('email').value.trim()),
+                address: {
+                  line1: '',
+                  city: '',
+                  state: '',
+                  country: '',
+                  postal_code: ''
+                }
+              }
+            });
+            
+            if (error) {
+              throw error;
+            }
+            
+            const response = await secureFetch('/process-payment', {
+              method: 'POST',
+              body: JSON.stringify({
+                paymentMethodId: paymentMethod.id,
+                amount: Math.round(currentDonationAmount * 100),
+                currency: 'usd',
+                donorName: sanitizeInput(document.getElementById('name').value.trim()),
+                donorEmail: sanitizeInput(document.getElementById('email').value.trim()),
+                donationType: currentDonationType,
+                description: `Donation to Rabbi's Garden`,
+                verificationToken: securityToken
+              })
+            });
+            
+            if (!response.success) {
+              throw new Error(response.error || 'Payment processing failed');
+            }
+            
+            if (response.requiresAction) {
+              const { error: confirmationError, paymentIntent } = await stripe.confirmPayment({
+                clientSecret: response.clientSecret,
+                return_url: window.location.origin + '/donation-complete',
+                receipt_email: sanitizeInput(document.getElementById('email').value.trim())
+              });
+              
+              if (confirmationError) {
+                throw confirmationError;
+              }
+              
+              if (paymentIntent.status === 'requires_action') {
+                return;
+              }
+            }
+            
+            showPaymentSuccess({
+              method: 'Credit Card',
+              transactionId: response.paymentIntentId,
+              donorName: document.getElementById('name').value.trim(),
+              donorEmail: document.getElementById('email').value.trim()
+            });
+            
+          } catch (error) {
+            console.error('Payment error:', error);
+            showPaymentError('Payment failed: ' + error.message);
+          } finally {
+            confirmPaymentBtn.disabled = false;
+            confirmPaymentBtn.textContent = `Pay $${currentDonationAmount.toFixed(2)}`;
+          }
+        }
+      });
+      
+      // Show payment success message securely
+      function showPaymentSuccess(details) {
+        hidePaymentModal();
+        
+        let message = `Thank you for your donation of $${currentDonationAmount.toFixed(2)}!\n\n`;
+        message += `Payment method: ${sanitizeInput(details.method)}\n`;
+        
+        if (details.transactionId) {
+          message += `Transaction ID: ${sanitizeInput(details.transactionId)}\n`;
+        }
+        if (details.payerEmail) {
+          message += `Email: ${sanitizeInput(details.payerEmail)}\n`;
+        }
+        if (details.payerName) {
+          message += `Name: ${sanitizeInput(details.payerName)}\n`;
+        }
+        if (details.instructions) {
+          message += `\n${sanitizeInput(details.instructions)}\n`;
+        }
+        
+        message += `\nA confirmation has been sent to your email.`;
+        
+        const successModal = document.createElement('div');
+        successModal.className = 'success-modal';
+        
+        const template = document.getElementById('successModalTemplate').cloneNode(true);
+        template.style.display = 'flex';
+        template.id = '';
+        template.querySelector('#successMessage').textContent = message;
+        
+        successModal.appendChild(template);
+        document.body.appendChild(successModal);
+        
+        document.getElementById('closeSuccessModal').addEventListener('click', () => {
+          document.body.removeChild(successModal);
+          
+          if (currentDonationType === 'custom') {
+            customDonationForm.reset();
+            amountOptions[2].classList.add('selected');
+            customAmountInput.value = '50';
+          }
+        });
+      }
+      
+      // Show payment error message securely
+      function showPaymentError(errorMessage) {
+        hidePaymentModal();
+        
+        const errorModal = document.createElement('div');
+        errorModal.className = 'error-modal';
+        
+        const template = document.getElementById('errorModalTemplate').cloneNode(true);
+        template.style.display = 'flex';
+        template.id = '';
+        template.querySelector('#errorMessage').textContent = sanitizeInput(errorMessage);
+        
+        errorModal.appendChild(template);
+        document.body.appendChild(errorModal);
+        
+        document.getElementById('closeErrorModal').addEventListener('click', () => {
+          document.body.removeChild(errorModal);
+          showPaymentModal();
+        });
+      }
+      
+      cancelPaymentBtn.addEventListener('click', hidePaymentModal);
+      
+      paymentModal.addEventListener('click', (e) => {
+        if (e.target === paymentModal) {
+          hidePaymentModal();
+        }
+      });
+      
+      function hidePaymentModal() {
+        paymentModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+
+      // Session timeout handling
+      let inactivityTimer;
+      const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+      
+      function resetInactivityTimer() {
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(() => {
+          if (paymentModal.style.display === 'flex') {
+            hidePaymentModal();
+            alert('Session timed out due to inactivity. Please start your donation again.');
+          }
+        }, SESSION_TIMEOUT);
+      }
+      
+      ['mousemove', 'keydown', 'click'].forEach(event => {
+        document.addEventListener(event, resetInactivityTimer);
+      });
+      
+      resetInactivityTimer();
+    });
+
+    // Privacy Policy functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const privacyLink = document.querySelector('a[href="privacy.html"]');
+      if (privacyLink) {
+        privacyLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          showPrivacyPolicy();
+        });
+      }
+    });
+
+    function showPrivacyPolicy() {
+      const privacyContent = `
+        <div class="success-content">
+          <h3>Privacy Policy</h3>
+          <p>Last Updated: <span id="privacyDate"></span></p>
+          
+          <p><strong>1. Information We Collect</strong></p>
+          <p>When you make a donation, we collect personal information such as your name, email address, and payment details. This information is used solely for processing your donation and maintaining our records.</p>
+          
+          <p><strong>2. How We Use Your Information</strong></p>
+          <p>We use your information to:</p>
+          <ul>
+            <li>Process your donation and send you a receipt</li>
+            <li>Communicate with you about your donation</li>
+            <li>Maintain our internal records</li>
+            <li>Improve our services</li>
+          </ul>
+          
+          <p><strong>3. Data Security</strong></p>
+          <p>We implement appropriate security measures to protect your personal information. All payment transactions are encrypted using SSL technology and processed through secure payment gateways.</p>
+          
+          <p><strong>4. Third-Party Services</strong></p>
+          <p>We use trusted third-party services (Stripe, PayPal) to process payments. These services have their own privacy policies governing the use of your information.</p>
+          
+          <p><strong>5. Your Rights</strong></p>
+          <p>You have the right to request access to, correction of, or deletion of your personal data. Contact us at privacy@rabbisgarden.org for any privacy-related requests.</p>
+          
+          <p><strong>6. Changes to This Policy</strong></p>
+          <p>We may update this policy from time to time. The updated version will be posted on our website with a new "Last Updated" date.</p>
+          
+          <button id="closePrivacyModal" class="btn">Close</button>
+        </div>
+      `;
+      
+      const privacyModal = document.createElement('div');
+      privacyModal.className = 'success-modal';
+      privacyModal.innerHTML = privacyContent;
+      
+      // Set current date in privacy policy
+      const now = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      privacyModal.querySelector('#privacyDate').textContent = now.toLocaleDateString('en-US', options);
+      
+      document.body.appendChild(privacyModal);
+      
+      document.getElementById('closePrivacyModal').addEventListener('click', () => {
+        document.body.removeChild(privacyModal);
+      });
+    }
+
+    // Backend Security Implementation (would be in server-side code)
+    /*
+    // Express.js security middleware example
+    const express = require('express');
+    const helmet = require('helmet');
+    const rateLimit = require('express-rate-limit');
+    const csrf = require('csurf');
+    const cookieParser = require('cookie-parser');
+    
+    const app = express();
+    
+    // Security headers
+    app.use(helmet());
+    app.use(helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "https://js.stripe.com", "https://www.paypal.com"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "https://images.unsplash.com", "data:"],
+        frameSrc: ["https://js.stripe.com", "https://www.paypal.com"],
+        connectSrc: ["'self'"]
+      }
+    }));
+    
+    // Rate limiting
+    const limiter = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 100
+    });
+    app.use(limiter);
+    
+    // CSRF protection
+    app.use(cookieParser());
+    const csrfProtection = csrf({ cookie: true });
+    app.use(csrfProtection);
+    
+    // Secure payment processing endpoint
+    app.post('/process-payment', express.json(), async (req, res) => {
+      try {
+        // Validate input
+        const { paymentMethodId, amount, currency, verificationToken } = req.body;
+        
+        if (!paymentMethodId || !amount || !currency || !verificationToken) {
+          return res.status(400).json({ error: 'Missing required fields' });
+        }
+        
+        if (amount < 100 || amount > 1000000) {
+          return res.status(400).json({ error: 'Invalid amount' });
+        }
+        
+        // Verify security token (implementation would check against session)
+        if (!verifySecurityToken(verificationToken)) {
+          return res.status(403).json({ error: 'Invalid security token' });
+        }
+        
+        // Create payment intent
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount,
+          currency,
+          payment_method: paymentMethodId,
+          confirmation_method: 'manual',
+          confirm: true,
+          metadata: {
+            donationType: req.body.donationType || 'custom'
+          },
+          receipt_email: req.body.donorEmail
+        });
+        
+        res.json({ 
+          success: true,
+          paymentIntentId: paymentIntent.id,
+          requiresAction: paymentIntent.status === 'requires_action',
+          clientSecret: paymentIntent.client_secret
+        });
+      } catch (error) {
+        console.error('Payment error:', error);
+        res.status(500).json({ error: error.message });
+      }
+    });
+    */
+  </script>
+</body>
+</html>
